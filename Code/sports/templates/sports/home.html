@@ -1,0 +1,257 @@
+{% load static %}
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+    <title>Document</title>
+    <style>
+        #content-box{
+            padding: 15px 20px;
+            border: 1px solid black;
+        }
+        .top-panel {
+            padding: 15px 20px;
+            border: 1px solid black;
+        }
+
+        .bottom-panel {
+            padding: 15px 20px;
+            border: 1px solid black;
+        }
+
+        table {
+          font-family: arial, sans-serif;
+          border-collapse: collapse;
+          width: 100%;
+        }
+
+        td, th {
+          border: 1px solid #dddddd;
+          text-align: left;
+          padding: 8px;
+        }
+        button {
+            color: blue;
+        }
+        #clear-data {
+            color: red;
+        }
+
+        a {
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="top-panel">
+        <button type="button" id="clear-data">
+            Clear Data
+        </button>
+
+        <button type="button" id="get-all-player">
+            All Player
+        </button>
+        <button type="button" id="get-all-coach">
+            All Coach
+        </button>
+        <button type="button" id="get-all-injury">
+            All Injury
+        </button>
+        <button type="button" id="get-all-player-position">
+            All Player Position
+        </button>
+        <button type="button" id="get-all-team">
+            All Team
+        </button>
+        <button type="button" id="get-all-team-stats">
+            All Team Stats
+        </button>
+        <button type="button" id="get-all-player-injuries">
+            All Player Injuries
+        </button>
+        <button type="button" id="get-all-player-stats">
+            All Player Stats
+        </button>
+    </div>
+
+    <div id="content-box">
+        No Data
+    </div>
+
+    <div class="bottom-panel">
+
+        <a href="{% url 'add-coach' %}">
+            <button type="button">Add Coach</button>
+        </a>
+
+        <a href="{% url 'add-injury' %}">
+            <button type="button">Add Injury</button>
+        </a>
+
+        <a href="{% url 'add-player-position' %}">
+            <button type="button">Add Player Position</button>
+        </a>
+
+        <a href="{% url 'add-team' %}">
+            <button type="button">Add Team</button>
+        </a>
+
+        <a href="{% url 'add-team-stats' %}">
+            <button type="button">Add Team Stats</button>
+        </a>
+
+        <a href="{% url 'add-player' %}">
+            <button type="button">Add Player</button>
+        </a>
+
+        <a href="{% url 'add-player-injuries' %}">
+            <button type="button">Add Player Injuries</button>
+        </a>
+
+        <a href="{% url 'add-player-stats' %}">
+            <button type="button">Add Player Stats</button>
+        </a>
+
+    </div>
+
+    <script src="{% static 'library/jquery-3.6.1.js' %}"></script>
+    <script>
+
+        function remove_content(){
+            $('#content-box').html('No Data');
+        }
+
+        function set_content(result){
+
+            if (result.length == 0) {
+                remove_content()
+                return;
+            }
+            let keys = Object.keys(result[0]);
+
+            let content = `
+                <table>
+                  <tr>`;
+
+            for (let i=0; i<keys.length; i++) {
+                   content += `<th>${keys[i]}</th>`;
+            }
+
+            content += '</tr>';
+
+
+            for(let i=0; i<result.length; i++) {
+                let obj = Object.values(result[i]);
+                content += '<tr>';
+
+                console.log(obj, obj[0]);
+
+                for (let j=0; j<obj.length; j++) {
+                   content += `<td>${obj[j]}</td>`;
+                }
+
+                content += '</tr>';
+            }
+
+            content += '</table>';
+
+            $('#content-box').html(content);
+
+        }
+
+
+        $(function() {
+
+            $('#clear-data').on('click', ()=>{
+                remove_content();
+            })
+
+            $('#get-all-player').on('click', ()=>{
+                $.ajax({
+                    url: "{% url 'get-all-player' %}",
+                    method: 'GET',
+                    success: function(result){
+                        set_content(result);
+                    }
+                });
+            })
+
+            $('#get-all-coach').on('click', ()=>{
+                $.ajax({
+                    url: "{% url 'get-all-coach' %}",
+                    method: 'GET',
+                    success: function(result){
+                        set_content(result);
+                    }
+                });
+            })
+
+            $('#get-all-injury').on('click', ()=>{
+                $.ajax({
+                    url: "{% url 'get-all-injury' %}",
+                    method: 'GET',
+                    success: function(result){
+                        set_content(result);
+                    }
+                });
+            })
+
+            $('#get-all-player-position').on('click', ()=>{
+                $.ajax({
+                    url: "{% url 'get-all-player-position' %}",
+                    method: 'GET',
+                    success: function(result){
+                        set_content(result);
+                    }
+                });
+            })
+
+            $('#get-all-team').on('click', ()=>{
+                $.ajax({
+                    url: "{% url 'get-all-team' %}",
+                    method: 'GET',
+                    success: function(result){
+                        set_content(result);
+                    }
+                });
+            })
+
+            $('#get-all-team-stats').on('click', ()=>{
+                $.ajax({
+                    url: "{% url 'get-all-team-stats' %}",
+                    method: 'GET',
+                    success: function(result){
+                        set_content(result);
+                    }
+                });
+            })
+
+            $('#get-all-player-injuries').on('click', ()=>{
+                $.ajax({
+                    url: "{% url 'get-all-player-injuries' %}",
+                    method: 'GET',
+                    success: function(result){
+                        set_content(result);
+                    }
+                });
+            })
+
+            $('#get-all-player-stats').on('click', ()=>{
+                $.ajax({
+                    url: "{% url 'get-all-player-stats' %}",
+                    method: 'GET',
+                    success: function(result){
+                        set_content(result);
+                    }
+                });
+            })
+
+
+        });
+
+
+
+    </script>
+
+</body>
+</html>
